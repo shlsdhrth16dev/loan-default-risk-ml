@@ -1,0 +1,65 @@
+{
+    "info": {
+        "_postman_id": "b3e3e3e3-3e3e-3e3e-3e3e-3e3e3e3e3e3e",
+        "name": "Loan Default Risk API",
+        "description": "Collection for testing the Loan Default Risk Prediction API",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "Predict Risk",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"person_age\": 22,\n    \"person_income\": 59000,\n    \"person_home_ownership\": \"RENT\",\n    \"person_emp_length\": 4.0,\n    \"loan_intent\": \"PERSONAL\",\n    \"loan_grade\": \"D\",\n    \"loan_amnt\": 35000,\n    \"loan_int_rate\": 16.02,\n    \"loan_percent_income\": 0.59,\n    \"cb_person_default_on_file\": \"Y\",\n    \"cb_person_cred_hist_length\": 3\n}"
+                },
+                "url": {
+                    "raw": "http://127.0.0.1:8000/predict",
+                    "protocol": "http",
+                    "host": [
+                        "127",
+                        "0",
+                        "0",
+                        "1"
+                    ],
+                    "port": "8000",
+                    "path": [
+                        "predict"
+                    ]
+                },
+                "description": "Predict loan default probability based on applicant data."
+            },
+            "response": []
+        },
+        {
+            "name": "Health Check",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "http://127.0.0.1:8000/",
+                    "protocol": "http",
+                    "host": [
+                        "127",
+                        "0",
+                        "0",
+                        "1"
+                    ],
+                    "port": "8000",
+                    "path": [
+                        ""
+                    ]
+                }
+            },
+            "response": []
+        }
+    ]
+}
