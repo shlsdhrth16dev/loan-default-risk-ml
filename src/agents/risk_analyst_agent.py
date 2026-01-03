@@ -11,7 +11,7 @@ import time
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
 from agents.base_agent import BaseAgent, AgentOutput
-from inference.predict import get_prediction_service
+from inference.robust_predict import get_robust_prediction_service
 
 
 class RiskAnalystAgent(BaseAgent):
@@ -27,7 +27,7 @@ class RiskAnalystAgent(BaseAgent):
     def __init__(self, threshold: float = 0.614):
         super().__init__(name="RiskAnalystAgent", version="1.0.0")
         self.threshold = threshold
-        self.prediction_service = get_prediction_service()
+        self.prediction_service = get_robust_prediction_service()
         
         # Risk thresholds
         self.clear_accept_threshold = 0.3  # prob < 0.3 → clear accept

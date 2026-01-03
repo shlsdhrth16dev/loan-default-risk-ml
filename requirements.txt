@@ -13,3 +13,5 @@ optuna
 shap
 evidently
 mlflow
+streamlit
+plotly
