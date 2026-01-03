@@ -11,3 +11,4 @@ pydantic
 pyyaml
 crewai
 xgboost
+optuna
