@@ -24,6 +24,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'src'))
 from agents.loan_decision_crew import get_loan_decision_crew
 from streamlit_components.agent_playground import render_agent_playground
 from streamlit_components.system_health import render_system_health
+from streamlit_components.comparison_lab import render_comparison_lab
 from inference.robust_predict import get_robust_prediction_service
 from models.init_models import check_and_init_models
 
@@ -338,6 +339,13 @@ def render_decision_result(result):
     
     with tab3:
         st.text(result['explanations']['auditor_explanation'])
+        st.download_button(
+            "Download Audit Report",
+            result['explanations']['auditor_explanation'],
+            f"audit_report_{result['timestamp'].strftime('%Y%m%d_%H%M%S')}.txt",
+            "text/plain",
+            use_container_width=True
+        )
     
     # Agent details
     with st.expander("🤖 Agent Execution Details"):
@@ -376,6 +384,28 @@ def render_dashboard():
     
     st.header("📊 Outcome Dashboard")
     st.markdown(f"*Based on {len(st.session_state.decisions_history)} evaluations*")
+    
+    # Export options
+    with st.expander("📥 Export Data", expanded=False):
+        export_df = pd.DataFrame([
+            {
+                'Timestamp': d['timestamp'],
+                'Decision': d['decision'],
+                'Probability': d['risk_assessment']['default_probability'],
+                'Risk_Level': d['risk_assessment']['risk_level'],
+                'Confidence': d['confidence']
+            }
+            for d in st.session_state.decisions_history
+        ])
+        csv = export_df.to_csv(index=False).encode('utf-8')
+        st.download_button(
+            "Download History as CSV",
+            csv,
+            "loan_decisions_history.csv",
+            "text/csv",
+            key='download-csv',
+            use_container_width=True
+        )
     
     # Prepare data
     df = pd.DataFrame([
@@ -479,7 +509,7 @@ def main():
         st.header("Navigation")
         page = st.radio(
             "Select View",
-            ["📝 Evaluate Application", "📊 Dashboard", "🎮 Agent Playground", "🛡️ System Health"],
+            ["📝 Evaluate Application", "📊 Dashboard", "🎮 Agent Playground", "🛡️ System Health", "🔬 Comparison Lab"],
             label_visibility="collapsed"
         )
         
@@ -526,9 +556,12 @@ def main():
     elif page == "🎮 Agent Playground":
         render_agent_playground()
         
-    else:  # System Health
+    elif page == "🛡️ System Health":
         service = get_robust_prediction_service()
         render_system_health(service)
+        
+    else:  # Comparison Lab
+        render_comparison_lab()
 
 
 if __name__ == "__main__":
