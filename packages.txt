@@ -1,0 +1,8 @@
+# System-level packages for Streamlit Cloud deployment
+# Most dependencies are Python packages in requirements.txt
+# This file is for apt-get packages (Debian/Ubuntu)
+
+# Add any system dependencies here if needed in the future
+# Example:
+# build-essential
+# libgomp1
