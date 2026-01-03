@@ -23,6 +23,9 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'src'))
 
 from agents.loan_decision_crew import get_loan_decision_crew
 from streamlit_components.agent_playground import render_agent_playground
+from streamlit_components.system_health import render_system_health
+from inference.robust_predict import get_robust_prediction_service
+from models.init_models import check_and_init_models
 
 # Page config
 st.set_page_config(
@@ -465,6 +468,10 @@ def render_dashboard():
 
 def main():
     """Main app."""
+    # Ensure models are ready
+    with st.spinner("Initializing models... (this may take a minute on first run)"):
+        check_and_init_models()
+    
     render_header()
     
     # Sidebar with status
@@ -472,7 +479,7 @@ def main():
         st.header("Navigation")
         page = st.radio(
             "Select View",
-            ["📝 Evaluate Application", "📊 Dashboard", "🎮 Agent Playground"],
+            ["📝 Evaluate Application", "📊 Dashboard", "🎮 Agent Playground", "🛡️ System Health"],
             label_visibility="collapsed"
         )
         
@@ -516,8 +523,12 @@ def main():
     elif page == "📊 Dashboard":
         render_dashboard()
     
-    else:  # Agent Playground
+    elif page == "🎮 Agent Playground":
         render_agent_playground()
+        
+    else:  # System Health
+        service = get_robust_prediction_service()
+        render_system_health(service)
 
 
 if __name__ == "__main__":
